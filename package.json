@@ -1,0 +1,22 @@
+{
+  "name": "website-stat",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "zip": "node scripts/compress.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "localforage": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/localforage": "^0.0.34",
+    "adm-zip": "^0.5.12",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}
