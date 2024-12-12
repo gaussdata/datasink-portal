@@ -10,6 +10,7 @@ const fetchTop10 = async () => {
   const data = res?.data || [];
   data.forEach((item: any) => {
     item.label = item.page_title;
+    item.href = item.page_url;
     item.count = item.view_count;
     item.percent = item.view_percent;
   })

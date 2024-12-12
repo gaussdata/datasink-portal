@@ -45,6 +45,7 @@
 .title {
   color: #666;
   font-size: 16px;
+  text-align: center; 
 }
 
 .list {
@@ -57,6 +58,11 @@
   margin-bottom: 8px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.list-item a {
+  color: #181818;
+  text-decoration: none;
 }
 
 .list-item .bar {

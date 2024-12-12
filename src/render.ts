@@ -73,13 +73,13 @@ export function renderList(dom: HTMLCanvasElement, data: any[], title = "") {
   data.forEach(item => {
     const $item = document.createElement('li');
     $item.classList.add('list-item');
-    $item.innerHTML = `<div class="bar">
+    $item.innerHTML = `<a target="__blank" href="${item.href}"><div class="bar">
       <div class="bar-inner">
         <span>${item.label}</span>
         <span>${item.count}</span>
       </div>
       <div class="bar-back" style="width: ${Math.round(item.percent)}%"></div>
-    </div>`;
+    </div></a>`;
     $list.appendChild($item);
   })
   dom.appendChild($list);
