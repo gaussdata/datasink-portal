@@ -6,7 +6,7 @@ const BASE_URL = "/api/datasink";
 
 const fetchTop10 = async () => {
   const $div = document.getElementById("pv-top10") as HTMLCanvasElement;
-  const res = await fetch(BASE_URL + "/pv-top10").then((res) => res.json());
+  const res = await fetch(BASE_URL + "/article-top10").then((res) => res.json());
   const data = res?.data || [];
   data.forEach((item: any) => {
     item.label = item.page_title;
