@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/stat',
+  base: "/apps/stat",
   resolve: {
     alias: {
       "@": path.resolve("src"),
@@ -11,22 +11,22 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '^/api/*': {
-        target: 'http://www.gausszhou.top/api',
+      "^/api/*": {
+        target: "http://www.gausszhou.top/api",
         secure: false,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
   build: {
-    outDir: "./dist/stat",
+    outDir: "./dist/apps/stat",
     rollupOptions: {
       output: {
         manualChunks(module) {
-          return 'main';
-        }
-      }
-    }
-  }
-})
+          return "main";
+        },
+      },
+    },
+  },
+});
