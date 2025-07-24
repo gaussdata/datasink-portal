@@ -28,7 +28,7 @@ const fetchDay30 = async () => {
 
 const fetchTop10 = async () => {
   const $div = document.getElementById("pv-top10") as HTMLDivElement;
-  const res = await fetch(BASE_URL + "/top-pages").then((res) => res.json());
+  const res = await fetch(BASE_URL + `/top-pages?end_time=${Date.now()}`).then((res) => res.json());
   const data = res?.data || [];
   renderList($div, data, "浏览页面 Top10");
 };
