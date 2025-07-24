@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
       "^/api/*": {
-        target: "http://www.gausszhou.top/api",
+        target: "https://www.gausszhou.top/api",
         secure: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
