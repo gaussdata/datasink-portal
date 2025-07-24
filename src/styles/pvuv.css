@@ -1,0 +1,25 @@
+.chart-pvuv-title {
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+}
+
+.chart-pv,
+.chart-uv {
+    width: 600px;
+    display: flex;
+    align-items: center;
+}
+
+.chart-pv-total,
+.chart-uv-total {
+    width: 100px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.chart-pv canvas,
+.chart-uv canvas {
+   width: calc(100% - 100px);
+   height: 100px;
+}
