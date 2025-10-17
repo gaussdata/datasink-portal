@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
 import Chart from 'chart.js/auto';
+import { analysisService } from '@/api/services/analysis.ts';
 
 interface ViewDataItem {
   x: string;
@@ -20,19 +21,12 @@ const props = defineProps<{
   title?: string;
 }>();
 
-const BASE_URL = '/api/datasink/analysis';
-
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 let chart: Chart | null = null;
 
 async function fetchData(): Promise<ViewDataItem[]> {
-  const res = await fetch(`${BASE_URL}/pvuv?date_level=${props.dateLevel}&end_time=${Date.now()}`).then(r => r.json());
-  const data: any[] = res?.data || [];
-  data.forEach(item => {
-    const d: string = item.date || '';
-    item.x = props.dateLevel === 'hour' ? d.slice(11, 13) : d.slice(8, 10);
-  });
-  return data;
+  const data = await analysisService.getPvuv(props.dateLevel);
+  return data as ViewDataItem[];
 }
 
 function render(data: ViewDataItem[]) {
@@ -79,4 +73,29 @@ const wrapperClass = computed(() => props.dateLevel === 'hour' ? 'chart-pv' : 'c
 </script>
 
 <style scoped>
+.chart-pvuv-title {
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+}
+
+.chart-pv,
+.chart-uv {
+    width: 600px;
+    display: flex;
+    align-items: center;
+}
+
+.chart-pv-total,
+.chart-uv-total {
+    width: 100px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.chart-pv canvas,
+.chart-uv canvas {
+   width: calc(100% - 100px);
+   height: 100px;
+}
 </style>

@@ -19,25 +19,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue';
+import { analysisService, type TopPageItem } from '@/api/services/analysis.ts';
 
-const props = defineProps<{ title?: string }>();
-const BASE_URL = '/api/datasink/analysis';
+defineProps<{ title?: string }>();
 
-interface TopPageDataItem {
-  pv: number;
-  url: string;
-}
-
-const data = ref<TopPageDataItem[]>([]);
+const data = ref<TopPageItem[]>([]);
 
 onMounted(async () => {
-  const res = await fetch(`${BASE_URL}/top-pages?end_time=${Date.now()}`).then(r => r.json());
-  data.value = (res?.data || []) as TopPageDataItem[];
+  data.value = await analysisService.getTopPages();
 });
 
 const total = computed(() => data.value.reduce((a, b) => a + (b.pv || 0), 0));
 
-function barWidth(item: TopPageDataItem) {
+function barWidth(item: TopPageItem) {
   const t = total.value;
   const pct = t > 0 ? Math.round(100 * item.pv / t) : 0;
   return `${pct}%`;
@@ -45,4 +39,47 @@ function barWidth(item: TopPageDataItem) {
 </script>
 
 <style scoped>
+.title {
+  color: #666;
+  font-size: 16px;
+  text-align: center; 
+}
+
+.list {
+  padding: 0;
+}
+
+.list-item {
+  list-style: none;
+  border: 1px solid #36a2eb;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;  
+}
+
+.list-item a {
+  color: #181818;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item .bar {
+  position: relative;
+}
+
+.list-item .bar-inner {
+  padding: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.list-item .bar-back {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  height: 100%;
+  background-color: #9ad0f5;
+}
 </style>
