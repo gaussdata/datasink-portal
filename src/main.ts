@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 
-import '@/styles/layout.css';
-import '@/styles/pvuv.css';
-import '@/styles/top-pages.css';
+import '@/styles/layout.scss';
+import '@/styles/pvuv.scss';
+import '@/styles/top-pages.scss';
 
 createApp(App).mount('#app');
