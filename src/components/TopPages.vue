@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="top-pages-list">
     <h2 class="title">{{ title }}</h2>
     <ul class="list">
       <li v-for="item in data" :key="item.url" class="list-item">
@@ -43,10 +43,11 @@ function barWidth(item: TopPageItem) {
   color: #666;
   font-size: 16px;
   text-align: center; 
+  margin-bottom: 16px;
 }
 
 .list {
-  padding: 0;
+  padding: 0 12px;
 }
 
 .list-item {

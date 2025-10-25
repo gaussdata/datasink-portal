@@ -3,13 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite --host",
     "build": "vite build",
-    "zip": "node scripts/compress.js",
-    "preview": "vite preview"
+    "dev": "vite --host",
+    "preview": "vite preview",
+    "zip": "node scripts/compress.js"
   },
   "dependencies": {
-    "chart.js": "^4.4.6",
     "vue": "^3.4.21"
   },
   "devDependencies": {

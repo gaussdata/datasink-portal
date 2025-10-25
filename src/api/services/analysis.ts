@@ -1,3 +1,5 @@
+import { Metrics } from "@/models";
+
 export type DateLevel = "hour" | "day";
 
 export interface PvuvItem {
@@ -46,6 +48,18 @@ export class AnalysisService {
       `${this.baseUrl}/top-pages?end_time=${endTime}`
     ).then((r) => r.json());
     return (res?.data || []) as TopPageItem[];
+  }
+
+  /**
+   * 获取指标数据
+   * @param endTime 结束时间，默认当前时间
+   * @returns 指标数据
+   */
+  async getMetrics(endTime: number = Date.now()): Promise<Metrics> {
+    const res = await fetch(
+      `${this.baseUrl}/metrics?end_time=${endTime}`
+    ).then((r) => r.json());
+    return (res?.data || new Metrics()) as Metrics;
   }
 }
 
