@@ -1,4 +1,5 @@
 import { formatInt, formatPercentage, millisecondToSecond } from '@/utils';
+import dayjs from 'dayjs';
 
 export enum MetricType {
   PAGEVIEWS = 'pageviews',
@@ -40,3 +41,62 @@ export const createMetricsList = (metrics: Metrics) => {
     },
   ];
 };
+
+export const DEFAULT_DATE_RANGE = '24h';
+
+export class DateRange {
+  startTime: number = dayjs().subtract(24, 'hour').startOf('hour').valueOf();
+  endTime: number = dayjs().endOf('hour').valueOf();
+}
+
+export interface DateOption {
+  label: string;
+  value: string;
+  getDateRange: () => DateRange;
+}
+
+export const createDateOptions = (): DateOption[] => {
+  return [
+    {
+      label: '24 小时',
+      value: '24h',
+      getDateRange() {
+        return {
+          startTime: dayjs().subtract(24, 'hour').startOf('hour').valueOf(),
+          endTime: dayjs().endOf('hour').valueOf(),
+        }
+      }
+    },
+    {
+      label: '7 天',
+      value: '7d',
+      getDateRange() {  
+        return {
+          startTime: dayjs().subtract(7, 'day').startOf('day').valueOf(),
+          endTime: dayjs().endOf('day').valueOf(),
+        }
+      }
+    },
+    {
+      label: '30 天',
+      value: '30d',
+      getDateRange() {  
+        return {
+          startTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+          endTime: dayjs().endOf('day').valueOf(),
+        }
+      }
+    },
+    {
+      label: '365 天',
+      value: '365d',
+      getDateRange() {  
+        return {
+          startTime: dayjs().subtract(365, 'day').startOf('day').valueOf(),
+          endTime: dayjs().endOf('day').valueOf(),
+        }
+      }
+    }
+
+  ];
+}

@@ -1,0 +1,49 @@
+<template>
+  <div class="date-picker">
+    <div
+      class="date-picker-item"
+      v-for="item in datePickerList"
+      :key="item.value"
+      :class="{ 'is-active': item.value === currentDateTag }"
+      @click="onClick(item)"
+    >
+      {{ item.label }}
+    </div>
+  </div>
+</template>
+<script lang="ts" setup>
+import { createDateOptions, DateOption } from '@/models';
+import { ref } from 'vue';
+const datePickerList = createDateOptions();
+const currentDateTag = ref(datePickerList[0].value);
+const emit = defineEmits(['change']);
+const onClick = (item: DateOption) => {
+  if (item.value === currentDateTag.value) {
+    return;
+  }
+  currentDateTag.value = item.value;
+  emit('change', item.getDateRange());
+};
+</script>
+<style lang="scss" scoped>
+.date-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-picker-item {
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.date-picker-item:hover {
+  background-color: #f5f5f5;
+}
+
+.date-picker-item.is-active {
+  background-color: #3eaf7c;
+  color: #fff;
+}
+</style>

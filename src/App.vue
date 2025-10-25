@@ -1,20 +1,40 @@
 <template>
-  <div class="grid-container">
-    <div class="box box-metrics">
-      <Metrics title="访问量统计" />
+  <div>
+    <div class="tool-container">
+      <DatePicker title="选择日期" @change="onDateChange" />
     </div>
-    <div class="box box-top-pages">
-      <TopPages title="页面 Top10" />
+    <div class="grid-container">
+      <div class="box box-metrics">
+        <Metrics title="访问量统计" :dateRange="dateRange" />
+      </div>
+      <div class="box box-top-pages">
+        <TopPages title="页面 Top10" :dateRange="dateRange" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import DatePicker from './components/DatePicker.vue';
 import Metrics from './components/Metrics.vue';
 import TopPages from './components/TopPages.vue';
+import { DateRange } from './models';
+
+const dateRange = ref(new DateRange());
+
+const onDateChange = (date: DateRange) => {
+  dateRange.value = date;
+};
 </script>
 
 <style lang="scss" scoped>
+.tool-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 12px auto 12px;
+}
+
 .grid-container {
   width: 100%;
   max-width: 1280px;
@@ -36,6 +56,11 @@ import TopPages from './components/TopPages.vue';
 
 .grid-container .box:hover {
   border-color: #3eaf7c;
+}
+
+.grid-container .box.box-date {
+  grid-column: span 12;
+  grid-row: span 1;
 }
 
 .grid-container .box.box-metrics {

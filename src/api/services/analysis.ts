@@ -1,5 +1,4 @@
-import { Metrics } from '@/models';
-import dayjs from 'dayjs';
+import { DateRange, Metrics } from '@/models';
 
 export type DateLevel = 'hour' | 'day';
 
@@ -24,8 +23,8 @@ export class AnalysisService {
    * @param endTime 结束时间，默认当前时间
    * @returns PVUV 数据列表
    */
-  async getPvuv(dateLevel: DateLevel, endTime: number = dayjs().endOf('day').valueOf()): Promise<PvuvItem[]> {
-    const res = await fetch(`${this.baseUrl}/pvuv?date_level=${dateLevel}&end_time=${endTime}`).then(r => r.json());
+  async getPvuv(dateLevel: DateLevel, dateRange: DateRange): Promise<PvuvItem[]> {
+    const res = await fetch(`${this.baseUrl}/pvuv?date_level=${dateLevel}&start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
     const data: any[] = res?.data || [];
     data.forEach(item => {
       const d: string = item.date || '';
@@ -39,8 +38,8 @@ export class AnalysisService {
    * @param endTime 结束时间，默认当前时间
    * @returns TOP 页面数据列表
    */
-  async getTopPages(endTime: number = dayjs().endOf('day').valueOf()): Promise<TopPageItem[]> {
-    const res = await fetch(`${this.baseUrl}/top-pages?end_time=${endTime}`).then(r => r.json());
+  async getTopPages(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-pages?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
     return (res?.data || []) as TopPageItem[];
   }
 
@@ -49,8 +48,8 @@ export class AnalysisService {
    * @param endTime 结束时间，默认当前时间
    * @returns 指标数据
    */
-  async getMetrics(endTime: number = dayjs().endOf('day').valueOf()): Promise<Metrics> {
-    const res = await fetch(`${this.baseUrl}/metrics?end_time=${endTime}`).then(r => r.json());
+  async getMetrics(dateRange: DateRange): Promise<Metrics> {
+    const res = await fetch(`${this.baseUrl}/metrics?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
     return (res?.data || new Metrics()) as Metrics;
   }
 }

@@ -1,33 +1,57 @@
 <template>
-  <div class="metrics-container">
+  <div class="metrics-container" v-loading="loading">
     <h2 class="title">{{ title }}</h2>
     <div class="metric-list">
- <div class="metric-item" v-for="item in metricsList" :key="item.label">
-      <div class="metric-label">{{ item.label }}</div>
-      <div class="metric-value">{{ item.value }}</div>
+      <div class="metric-item" v-for="item in metricsList" :key="item.label">
+        <div class="metric-label">{{ item.label }}</div>
+        <div class="metric-value">{{ item.value }}</div>
+      </div>
     </div>
-    </div>
-   
   </div>
 </template>
 <script lang="ts" setup>
 import { analysisService } from '@/api/services/analysis';
-import { createMetricsList, Metrics } from '@/models';
-import { computed, onMounted, ref } from 'vue';
-defineProps<{ title?: string }>();
+import { createMetricsList, DateRange, Metrics } from '@/models';
+import { computed, onMounted, ref, watch } from 'vue';
+const props = defineProps({
+  title: {
+    default: '访问量统计',
+  },
+  dateRange: {
+    default: () => new DateRange(),
+  },
+});
+
+const loading = ref(false);
 
 const metrics = ref<Metrics>(new Metrics());
 const metricsList = computed(() => createMetricsList(metrics.value));
 
+const getMetrics = async () => {
+  loading.value = true;
+  try {
+    metrics.value = await analysisService.getMetrics(props.dateRange);
+  } finally {
+    loading.value = false;
+  }
+};
+
+watch(
+  () => props.dateRange,
+  () => {
+    getMetrics();
+  },
+);
+
 onMounted(async () => {
-  metrics.value = await analysisService.getMetrics();
+  getMetrics();
 });
 </script>
 <style lang="scss" scoped>
 .title {
   color: #666;
   font-size: 16px;
-  text-align: center; 
+  text-align: center;
   margin-bottom: 16px;
 }
 
@@ -45,8 +69,8 @@ onMounted(async () => {
   color: #4b4b4b;
 }
 .metric-value {
-   font-weight: bold;
-   font-size: 36px;
-   color: #2c2c2c;
+  font-weight: bold;
+  font-size: 36px;
+  color: #2c2c2c;
 }
 </style>

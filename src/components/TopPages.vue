@@ -1,5 +1,5 @@
 <template>
-  <div class="top-pages-list">
+  <div class="top-pages-list" v-loading="loading">
     <h2 class="title">{{ title }}</h2>
     <ul class="list">
       <li v-for="item in data" :key="item.url" class="list-item">
@@ -18,18 +18,39 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { analysisService, type TopPageItem } from '@/api/services/analysis.ts';
+import { DateRange } from '@/models';
 
-defineProps<{ title?: string }>();
-
-const data = ref<TopPageItem[]>([]);
-
-onMounted(async () => {
-  data.value = await analysisService.getTopPages();
+const props = defineProps({
+  title: {
+    default: '页面 Top10',
+  },
+  dateRange: {
+    default: () => new DateRange(),
+  },
 });
 
+const loading = ref(false);
+
+const data = ref<TopPageItem[]>([]);
+const getTopPages = async () => {
+  loading.value = true;
+  try {
+    data.value = await analysisService.getTopPages(props.dateRange);
+  } finally {
+    loading.value = false;
+  }
+}
+
 const total = computed(() => data.value.reduce((a, b) => a + (b.pv || 0), 0));
+
+watch(() => props.dateRange, () => {
+  getTopPages();
+});
+onMounted(async () => {
+  getTopPages();
+});
 
 function barWidth(item: TopPageItem) {
   const t = total.value;
@@ -85,6 +106,6 @@ function urlPath(url: string) {
   z-index: -1;
   top: 0;
   height: 100%;
-  background-color: #9ad0f5;
+  background-color: #bdd6fe;
 }
 </style>
