@@ -1,17 +1,20 @@
 <template>
   <div class="top-pages-list" v-loading="loading">
     <h2 class="title">{{ title }}</h2>
-    <ul class="list">
-      <li v-for="item in data" :key="item.url" class="list-item">
-        <a :href="item.url" target="__blank">
-          <div class="bar">
-            <div class="bar-inner">
-              <span>{{ urlPath(item.url) }}</span>
-              <span>{{ item.pv }}</span>
-            </div>
-            <div class="bar-back" :style="{ width: barWidth(item) }"></div>
+    <ul class="page-list">
+      <li v-for="item in data" :key="item.url" class="page-list-item">
+        <div class="text">
+          <a class="url" :href="item.url" target="__blank">
+            {{ urlPath(item.url) }}
+          </a>
+          <span class="count">{{ item.pv }}</span>
+        </div>
+        <div class="bar">
+          <div class="bar-inner">
+            {{ barWidth(item) }}
           </div>
-        </a>
+          <div class="bar-fill" :style="{ width: barWidth(item) }"></div>
+        </div>
       </li>
     </ul>
   </div>
@@ -41,20 +44,23 @@ const getTopPages = async () => {
   } finally {
     loading.value = false;
   }
-}
+};
 
 const total = computed(() => data.value.reduce((a, b) => a + (b.pv || 0), 0));
 
-watch(() => props.dateRange, () => {
-  getTopPages();
-});
+watch(
+  () => props.dateRange,
+  () => {
+    getTopPages();
+  },
+);
 onMounted(async () => {
   getTopPages();
 });
 
 function barWidth(item: TopPageItem) {
   const t = total.value;
-  const pct = t > 0 ? Math.round(100 * item.pv / t) : 0;
+  const pct = t > 0 ? Math.round((100 * item.pv) / t) : 0;
   return `${pct}%`;
 }
 
@@ -63,49 +69,67 @@ function urlPath(url: string) {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .title {
-  color: #666;
   font-size: 16px;
-  text-align: center; 
+  text-align: center;
   margin-bottom: 16px;
 }
 
-.list {
+.page-list {
   padding: 0 12px;
 }
 
-.list-item {
+.page-list-item {
   list-style: none;
-  border: 1px solid #36a2eb;
+  border: 1px solid #3eaf7c;
   margin-bottom: 8px;
   border-radius: 4px;
-  cursor: pointer;  
-}
-
-.list-item a {
-  color: #181818;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-}
-
-.list-item .bar {
-  position: relative;
-}
-
-.list-item .bar-inner {
-  padding: 4px;
+  cursor: pointer;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  height: 32px;
+  .text {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+  }
+  .url {
+    color: #181818;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      color: #3eaf7c;
+      text-decoration: underline;
+    }
+  }
+  .count {
+    font-weight: bold;
+  }
 }
 
-.list-item .bar-back {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  height: 100%;
-  background-color: #bdd6fe;
+.page-list-item {
+  .bar {
+    width: 100px;
+    height: 100%;
+    border-left: 1px solid #3eaf7c;
+    position: relative;
+  }
+  .bar-inner {
+    line-height: 32px;
+    padding: 0 8px;
+  }
+  .bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #3eaf7c77;
+  }
 }
 </style>

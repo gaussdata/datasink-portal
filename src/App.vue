@@ -52,9 +52,6 @@ const onDateChange = (date: DateRange) => {
   border: 2px solid #ededed;
   grid-column: span 1;
   grid-row: span 1;
-}
-
-.grid-container .box:hover {
   border-color: #3eaf7c;
 }
 

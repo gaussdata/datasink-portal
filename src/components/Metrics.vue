@@ -49,7 +49,6 @@ onMounted(async () => {
 </script>
 <style lang="scss" scoped>
 .title {
-  color: #666;
   font-size: 16px;
   text-align: center;
   margin-bottom: 16px;
