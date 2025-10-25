@@ -1,21 +1,22 @@
 {
   "name": "datasink-portal",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
-    "build": "vite build",
     "dev": "vite --host",
+    "build": "vite build",
     "preview": "vite preview",
-    "zip": "node scripts/compress.js"
+    "archive": "node scripts/archive.js"
   },
   "dependencies": {
+    "dayjs": "^1.11.18",
     "vue": "^3.4.21"
   },
   "devDependencies": {
-    "adm-zip": "^0.5.12",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0",
     "@vitejs/plugin-vue": "^5.0.5",
-    "sass": "^1.78.0"
+    "adm-zip": "^0.5.12",
+    "sass": "^1.78.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
   }
 }
