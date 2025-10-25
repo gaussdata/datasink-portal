@@ -6,7 +6,7 @@
         <a :href="item.url" target="__blank">
           <div class="bar">
             <div class="bar-inner">
-              <span>{{ item.url }}</span>
+              <span>{{ urlPath(item.url) }}</span>
               <span>{{ item.pv }}</span>
             </div>
             <div class="bar-back" :style="{ width: barWidth(item) }"></div>
@@ -35,6 +35,10 @@ function barWidth(item: TopPageItem) {
   const t = total.value;
   const pct = t > 0 ? Math.round(100 * item.pv / t) : 0;
   return `${pct}%`;
+}
+
+function urlPath(url: string) {
+  return new URL(url).pathname;
 }
 </script>
 
