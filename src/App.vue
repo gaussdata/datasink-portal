@@ -1,13 +1,10 @@
 <template>
   <div class="grid-container">
-    <div class="box box-date-select">
-      <div></div>
-    </div>
     <div class="box box-metrics">
       <Metrics title="访问量统计" />
     </div>
     <div class="box box-top-pages">
-      <TopPages title="浏览页面 Top10" />
+      <TopPages title="页面 Top10" />
     </div>
   </div>
 </template>
@@ -42,12 +39,7 @@ import TopPages from './components/TopPages.vue';
 }
 
 .grid-container .box.box-metrics {
-  grid-column: span 8;
-  grid-row: span 1;
-}
-
-.grid-container .box.box-date-select {
-  grid-column: span 4;
+  grid-column: span 12;
   grid-row: span 1;
 }
 
@@ -57,7 +49,6 @@ import TopPages from './components/TopPages.vue';
 }
 
 @media screen and (max-width: 768px) {
-  .grid-container .box.box-date-select,
   .grid-container .box.box-metrics,
   .grid-container .box.box-top-pages {
     grid-column: span 12;

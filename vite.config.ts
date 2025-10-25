@@ -13,11 +13,11 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "^/api/*": {
-        target: "http://localhost:3000/api",
+      "^/api/datasink/*": {
+        target: "http://localhost:3000",
         secure: false,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: (path) => path.replace(/^\/api\/datasink/, ""),
       },
     },
   },

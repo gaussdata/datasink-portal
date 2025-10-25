@@ -1,3 +1,5 @@
+import { formatInt, formatPercentage, millisecondToSecond } from '@/utils';
+
 export enum MetricType {
   PAGEVIEWS = 'pageviews',
   VISITORS = 'visitors',
@@ -17,16 +19,24 @@ export class Metrics {
 export const createMetricsList = (metrics: Metrics) => {
   return [
     {
-      label: '浏览次数',
-      value: metrics[MetricType.PAGEVIEWS],
+      label: '浏览量',
+      value: formatInt(metrics[MetricType.PAGEVIEWS]),
     },
     {
-      label: '浏览人数',
-      value: metrics[MetricType.VISITORS],
+      label: '访问次数',
+      value: formatInt(metrics[MetricType.VISITS]),
     },
     {
-      label: '会话次数',
-      value: metrics[MetricType.VISITS],
+      label: '访客',
+      value: formatInt(metrics[MetricType.VISITORS]),
+    },
+    {
+      label: '跳出率',
+      value: formatPercentage(metrics[MetricType.BOUNCES]),
+    },
+    {
+      label: '平均会话时长',
+      value: millisecondToSecond(metrics[MetricType.TOTAL_TIME]),
     },
   ];
 };
