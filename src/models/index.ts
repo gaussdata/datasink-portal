@@ -42,11 +42,11 @@ export const createMetricsList = (metrics: Metrics) => {
   ];
 };
 
-export const DEFAULT_DATE_RANGE = '7d';
+export const DEFAULT_DATE_RANGE = '24h';
 
 export class DateRange {
-  startTime: number = dayjs().subtract(7, 'day').startOf('day').valueOf();
-  endTime: number = dayjs().endOf('day').valueOf();
+  startTime: number = dayjs().subtract(24, 'hour').startOf('hour').valueOf();
+  endTime: number = dayjs().endOf('hour').valueOf();
 }
 
 export interface DateOption {
@@ -57,6 +57,16 @@ export interface DateOption {
 
 export const createDateOptions = (): DateOption[] => {
   return [
+    {
+      label: '24 小时',
+      value: '24h',
+      getDateRange() {
+        return {
+          startTime: dayjs().subtract(24, 'hour').startOf('hour').valueOf(),
+          endTime: dayjs().endOf('hour').valueOf(),
+        }
+      }
+    },
     {
       label: '7 天',
       value: '7d',
@@ -78,15 +88,14 @@ export const createDateOptions = (): DateOption[] => {
       }
     },
     {
-      label: '365 天',
-      value: '365d',
+      label: '12 月',
+      value: '12m',
       getDateRange() {
         return {
-          startTime: dayjs().subtract(365, 'day').startOf('day').valueOf(),
-          endTime: dayjs().endOf('day').valueOf(),
+          startTime: dayjs().subtract(12, 'month').startOf('month').valueOf(),
+          endTime: dayjs().endOf('month').valueOf(),
         }
       }
-    }
-
+    },
   ];
 }
