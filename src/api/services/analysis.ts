@@ -1,17 +1,33 @@
-import { DateRange, Metrics } from '@/models';
+import { DateLevel, DateRange, Metrics } from '@/models';
 
-export type DateLevel = 'hour' | 'day';
-
-export interface PvuvItem {
-  date?: string;
+export interface PvUVItem {
+  date: string;
   pv: number;
   uv: number;
-  x?: string;
+}
+
+export interface ChartItem {
+  x: string;
+  pv: number;
+  uv: number;
 }
 
 export interface TopPageItem {
   url: string;
   pv: number;
+}
+
+function formatDate(date: string, dateLevel: DateLevel) {
+  if (!date) {
+    return '';
+  }
+  if (dateLevel === DateLevel.HOUR) {
+    return date.slice(5, 13) + ':00';
+  }
+  if (dateLevel === DateLevel.DAY) {
+    return date.slice(5, 10);
+  }
+  return date.slice(0, 8);
 }
 
 export class AnalysisService {
@@ -23,14 +39,17 @@ export class AnalysisService {
    * @param endTime 结束时间，默认当前时间
    * @returns PVUV 数据列表
    */
-  async getPvuv(dateLevel: DateLevel, dateRange: DateRange): Promise<PvuvItem[]> {
+  async getPvuv(dateLevel: DateLevel, dateRange: DateRange): Promise<ChartItem[]> {
     const res = await fetch(`${this.baseUrl}/pvuv?date_level=${dateLevel}&start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
-    const data: any[] = res?.data || [];
-    data.forEach(item => {
+    const data: PvUVItem[] = res?.data || [];
+    return data.map(item => {
       const d: string = item.date || '';
-      item.x = dateLevel === 'hour' ? d.slice(11, 13) : d.slice(8, 10);
+      return {
+        pv: item.pv || 0,
+        uv: item.uv || 0,
+        x : formatDate(d, dateLevel)
+      }
     });
-    return data as PvuvItem[];
   }
 
   /**

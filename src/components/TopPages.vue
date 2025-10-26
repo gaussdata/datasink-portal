@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { analysisService, type TopPageItem } from '@/api/services/analysis.ts';
-import { DateRange } from '@/models';
+import { DateVo } from '@/models';
 import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -33,8 +33,8 @@ const props = defineProps({
   type: {
     default: 'url', // url referrer
   },
-  dateRange: {
-    default: () => new DateRange(),
+  dateVo: {
+    default: () => new DateVo(),
   },
 });
 
@@ -45,9 +45,9 @@ const getTopPages = async () => {
   loading.value = true;
   try {
     if (props.type === 'url') {
-      data.value = await analysisService.getTopPages(props.dateRange);
+      data.value = await analysisService.getTopPages(props.dateVo.range);
     } else {
-      data.value = await analysisService.getTopReferers(props.dateRange);
+      data.value = await analysisService.getTopReferers(props.dateVo.range);
     }
 
   } finally {
@@ -58,7 +58,7 @@ const getTopPages = async () => {
 const total = computed(() => data.value.reduce((a, b) => a + (b.pv || 0), 0));
 
 watch(
-  () => props.dateRange,
+  () => props.dateVo,
   () => {
     getTopPages();
   },
