@@ -4,7 +4,8 @@
     <ul class="page-list">
       <li v-for="item in data" :key="item.url" class="page-list-item">
         <div class="text">
-          <a class="url" :href="item.url" target="__blank">
+          <!-- 我们不希望需要分析的目标网站引用本站的来源，造成数据失真 -->
+          <a class="url" :href="item.url" target="_blank" rel="noopener noreferrer">
             {{ type === 'url' ? urlPath(item.url) : urlOrigin(item.url) }}
           </a>
           <span class="count">{{ item.pv }}</span>
