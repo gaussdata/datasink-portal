@@ -21,13 +21,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from 'vue';
 import { analysisService, type TopPageItem } from '@/api/services/analysis.ts';
 import { DateRange } from '@/models';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
   title: {
     default: '页面 Top10',
+  },
+  type: {
+    default: 'url', // url referrer
   },
   dateRange: {
     default: () => new DateRange(),
@@ -40,7 +43,12 @@ const data = ref<TopPageItem[]>([]);
 const getTopPages = async () => {
   loading.value = true;
   try {
-    data.value = await analysisService.getTopPages(props.dateRange);
+    if (props.type === 'url') {
+      data.value = await analysisService.getTopPages(props.dateRange);
+    } else {
+      data.value = await analysisService.getTopReferers(props.dateRange);
+    }
+
   } finally {
     loading.value = false;
   }
@@ -65,7 +73,9 @@ function barWidth(item: TopPageItem) {
 }
 
 function urlPath(url: string) {
-  return new URL(url).pathname;
+  const [path, _hash] = url.split('#');
+  const [pathname, _query] = path.split('?');
+  return pathname || '/';
 }
 </script>
 

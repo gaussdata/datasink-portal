@@ -8,7 +8,10 @@
         <Metrics title="访问量统计" :dateRange="dateRange" />
       </div>
       <div class="box box-top-pages">
-        <TopPages title="页面 Top10" :dateRange="dateRange" />
+        <TopPages title="页面 Top10" type="url" :dateRange="dateRange" />
+      </div>
+      <div class="box box-top-referers">
+        <TopPages title="来源 Top10" type="referrer" :dateRange="dateRange" />
       </div>
     </div>
   </div>
@@ -22,7 +25,6 @@ import TopPages from './components/TopPages.vue';
 import { DateRange } from './models';
 
 const dateRange = ref(new DateRange());
-
 const onDateChange = (date: DateRange) => {
   dateRange.value = date;
 };
@@ -65,15 +67,9 @@ const onDateChange = (date: DateRange) => {
   grid-row: span 1;
 }
 
-.grid-container .box.box-top-pages {
+.grid-container .box.box-top-pages,
+.grid-container .box.box-top-referers {
   grid-column: span 12;
   grid-row: span 4;
-}
-
-@media screen and (max-width: 768px) {
-  .grid-container .box.box-metrics,
-  .grid-container .box.box-top-pages {
-    grid-column: span 12;
-  }
 }
 </style>

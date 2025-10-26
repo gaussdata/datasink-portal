@@ -44,6 +44,16 @@ export class AnalysisService {
   }
 
   /**
+   * 获取 TOP 引用来源数据
+   * @param endTime 结束时间，默认当前时间
+   * @returns TOP 引用来源数据列表
+   */
+  async getTopReferers(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-referers?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || []) as TopPageItem[];
+  }
+
+  /**
    * 获取指标数据
    * @param endTime 结束时间，默认当前时间
    * @returns 指标数据
