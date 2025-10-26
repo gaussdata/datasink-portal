@@ -5,7 +5,7 @@
       <li v-for="item in data" :key="item.url" class="page-list-item">
         <div class="text">
           <a class="url" :href="item.url" target="__blank">
-            {{ urlPath(item.url) }}
+            {{ type === 'url' ? urlPath(item.url) : urlOrigin(item.url) }}
           </a>
           <span class="count">{{ item.pv }}</span>
         </div>
@@ -73,9 +73,21 @@ function barWidth(item: TopPageItem) {
 }
 
 function urlPath(url: string) {
-  const [path, _hash] = url.split('#');
-  const [pathname, _query] = path.split('?');
-  return pathname || '/';
+  try {
+    const urlObj = new URL(url);
+    return urlObj.pathname || '/';
+  } catch (error) {
+    return url;
+  }
+}
+
+function urlOrigin(url: string) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.origin;
+  } catch (error) {
+    return url;
+  }
 }
 </script>
 

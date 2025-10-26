@@ -69,7 +69,14 @@ const onDateChange = (date: DateRange) => {
 
 .grid-container .box.box-top-pages,
 .grid-container .box.box-top-referers {
-  grid-column: span 12;
+  grid-column: span 6;
   grid-row: span 4;
+}
+
+@media screen and (max-width: 960px) {
+  .grid-container .box.box-top-pages,
+  .grid-container .box.box-top-referers {
+    grid-column: span 12;
+  }
 }
 </style>
