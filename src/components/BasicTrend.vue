@@ -75,9 +75,10 @@ onMounted(() => {
 .trend-row {
   display: flex;
   align-items: center;
+  padding: 0 12px;
   gap: 16px;
   .trend-total {
-    width: 80px;
+    width: 50px;
     font-size: 14px;
   }
   .trend-total-value {
@@ -85,8 +86,17 @@ onMounted(() => {
     font-size: 24px;
   }
   .trend-chart {
-    flex: 1;
-    padding-right: 16px;
+    width: calc(100% - 50px);
+  }
+}
+@media screen and (max-width: 960px) {
+  .trend-row {
+    .trend-total {
+      display: none;
+    }
+    .trend-chart {
+      width: 100%;
+    }
   }
 }
 </style>

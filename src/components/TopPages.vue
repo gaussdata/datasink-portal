@@ -113,10 +113,12 @@ function urlOrigin(url: string) {
   align-items: center;
   height: 32px;
   .text {
+    width: calc(100% - 100px);
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
     padding: 0 8px;
   }
   .url {

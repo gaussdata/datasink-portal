@@ -61,7 +61,7 @@ onMounted(async () => {
 }
 
 .metric-item {
-  width: 160px;
+  width: 100px;
 }
 .metric-label {
   font-size: 14px;

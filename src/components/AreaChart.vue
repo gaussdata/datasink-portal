@@ -62,7 +62,7 @@ const props = defineProps({
 });
 
 const containerRef = ref<HTMLDivElement>();
-const svgWidth = ref(400);
+const svgWidth = ref(100);
 const svgHeight = ref(100);
 const PADDING = 12;
 
@@ -168,6 +168,7 @@ onUnmounted(() => {
 .area-chart {
   position: relative;
   padding-top: 12px;
+  width: 100%;
 }
 .chart-tooltip {
   position: absolute;
