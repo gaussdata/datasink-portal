@@ -67,11 +67,6 @@ const onDateChange = (value: DateVo) => {
   border-color: #3eaf7c;
 }
 
-.grid-container .box.box-date {
-  grid-column: span 12;
-  grid-row: span 1;
-}
-
 .grid-container .box.box-area-chart,
 .grid-container .box.box-metrics {
   grid-column: span 12;
@@ -83,7 +78,7 @@ const onDateChange = (value: DateVo) => {
 .grid-container .box.box-top-oses,
 .grid-container .box.box-top-browsers {
   grid-column: span 6;
-  grid-row: span 4;
+  grid-row: span 4 auto;
 }
 
 @media screen and (max-width: 960px) {
