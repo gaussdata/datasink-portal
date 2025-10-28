@@ -15,6 +15,8 @@ export interface ChartItem {
 export interface TopPageItem {
   url: string;
   pv: number;
+  value: number;
+  label: string;
 }
 
 function formatDate(date: string, dateLevel: DateLevel) {
@@ -34,6 +36,16 @@ export class AnalysisService {
   private baseUrl = '/api/datasink/analysis';
 
   /**
+ * 获取指标数据
+ * @param endTime 结束时间，默认当前时间
+ * @returns 指标数据
+ */
+  async getMetrics(dateRange: DateRange): Promise<Metrics> {
+    const res = await fetch(`${this.baseUrl}/metrics?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || new Metrics()) as Metrics;
+  }
+
+  /**
    * 获取 PVUV 数据
    * @param dateLevel 日期级别，hour 或 day
    * @param endTime 结束时间，默认当前时间
@@ -47,7 +59,7 @@ export class AnalysisService {
       return {
         pv: item.pv || 0,
         uv: item.uv || 0,
-        x : formatDate(d, dateLevel)
+        x: formatDate(d, dateLevel)
       }
     });
   }
@@ -73,13 +85,24 @@ export class AnalysisService {
   }
 
   /**
-   * 获取指标数据
+ * 获取 TOP 操作系统数据
+ * @param endTime 结束时间，默认当前时间
+ * @returns TOP 操作系统数据列表
+ */
+  async getTopOs(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-oses?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || []) as TopPageItem[];
+  }
+
+
+  /**
+   * 获取 TOP 浏览器数据
    * @param endTime 结束时间，默认当前时间
-   * @returns 指标数据
+   * @returns TOP 浏览器数据列表
    */
-  async getMetrics(dateRange: DateRange): Promise<Metrics> {
-    const res = await fetch(`${this.baseUrl}/metrics?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
-    return (res?.data || new Metrics()) as Metrics;
+  async getTopBrowsers(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-browsers?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || []) as TopPageItem[];
   }
 }
 

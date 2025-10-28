@@ -16,6 +16,12 @@
       <div class="box box-top-referers">
         <TopPages title="来源 Top10" type="referrer" :dateVo="dateVo" />
       </div>
+      <div class="box box-top-oses">
+        <TopPages title="操作系统 Top10" type="os" :dateVo="dateVo" />
+      </div>
+      <div class="box box-top-browsers">
+        <TopPages title="浏览器 Top10" type="browser" :dateVo="dateVo" />
+      </div>
     </div>
   </div>
 </template>
@@ -71,15 +77,20 @@ const onDateChange = (value: DateVo) => {
   grid-column: span 12;
   grid-row: span 1;
 }
+
 .grid-container .box.box-top-pages,
-.grid-container .box.box-top-referers {
+.grid-container .box.box-top-referers,
+.grid-container .box.box-top-oses,
+.grid-container .box.box-top-browsers {
   grid-column: span 6;
   grid-row: span 4;
 }
 
 @media screen and (max-width: 960px) {
   .grid-container .box.box-top-pages,
-  .grid-container .box.box-top-referers {
+  .grid-container .box.box-top-referers,
+  .grid-container .box.box-top-oses,
+  .grid-container .box.box-top-browsers {
     grid-column: span 12;
   }
 }

@@ -5,9 +5,11 @@
       <li v-for="item in data" :key="item.url" class="page-list-item">
         <div class="text">
           <!-- 我们不希望需要分析的目标网站引用本站的来源，造成数据失真 -->
-          <a class="url" :href="item.url" target="_blank" rel="noopener noreferrer">
-            {{ type === 'url' ? urlPath(item.url) : urlOrigin(item.url) }}
+          <a class="url" v-if="type === 'url'" :href="item.url" target="_blank" rel="noopener noreferrer">
+            {{ urlPath(item.url) }}
           </a>
+          <span v-else-if="type === 'referrer'">{{ urlOrigin(item.url) }}</span>
+          <span v-else>{{ item.label }}</span>
           <span class="count">{{ item.pv }}</span>
         </div>
         <div class="bar">
@@ -46,8 +48,12 @@ const getTopPages = async () => {
   try {
     if (props.type === 'url') {
       data.value = await analysisService.getTopPages(props.dateVo.range);
-    } else {
+    } else if (props.type === 'referrer') {
       data.value = await analysisService.getTopReferers(props.dateVo.range);
+    } else if (props.type === 'os') {
+      data.value = await analysisService.getTopOs(props.dateVo.range);
+    } else if (props.type === 'browser') {
+      data.value = await analysisService.getTopBrowsers(props.dateVo.range);
     }
 
   } finally {
