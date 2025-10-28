@@ -1,21 +1,49 @@
-import { DateRange, Metrics } from '@/models';
+import { DateLevel, DateRange, Metrics } from '@/models';
 
-export type DateLevel = 'hour' | 'day';
-
-export interface PvuvItem {
-  date?: string;
+export interface PvUVItem {
+  date: string;
   pv: number;
   uv: number;
-  x?: string;
+}
+
+export interface ChartItem {
+  x: string;
+  pv: number;
+  uv: number;
 }
 
 export interface TopPageItem {
   url: string;
   pv: number;
+  value: number;
+  label: string;
+}
+
+function formatDate(date: string, dateLevel: DateLevel) {
+  if (!date) {
+    return '';
+  }
+  if (dateLevel === DateLevel.HOUR) {
+    return date.slice(5, 13) + ':00';
+  }
+  if (dateLevel === DateLevel.DAY) {
+    return date.slice(5, 10);
+  }
+  return date.slice(0, 8);
 }
 
 export class AnalysisService {
   private baseUrl = '/api/datasink/analysis';
+
+  /**
+ * 获取指标数据
+ * @param endTime 结束时间，默认当前时间
+ * @returns 指标数据
+ */
+  async getMetrics(dateRange: DateRange): Promise<Metrics> {
+    const res = await fetch(`${this.baseUrl}/metrics?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || new Metrics()) as Metrics;
+  }
 
   /**
    * 获取 PVUV 数据
@@ -23,14 +51,17 @@ export class AnalysisService {
    * @param endTime 结束时间，默认当前时间
    * @returns PVUV 数据列表
    */
-  async getPvuv(dateLevel: DateLevel, dateRange: DateRange): Promise<PvuvItem[]> {
+  async getPvuv(dateLevel: DateLevel, dateRange: DateRange): Promise<ChartItem[]> {
     const res = await fetch(`${this.baseUrl}/pvuv?date_level=${dateLevel}&start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
-    const data: any[] = res?.data || [];
-    data.forEach(item => {
+    const data: PvUVItem[] = res?.data || [];
+    return data.map(item => {
       const d: string = item.date || '';
-      item.x = dateLevel === 'hour' ? d.slice(11, 13) : d.slice(8, 10);
+      return {
+        pv: item.pv || 0,
+        uv: item.uv || 0,
+        x: formatDate(d, dateLevel)
+      }
     });
-    return data as PvuvItem[];
   }
 
   /**
@@ -54,13 +85,24 @@ export class AnalysisService {
   }
 
   /**
-   * 获取指标数据
+ * 获取 TOP 操作系统数据
+ * @param endTime 结束时间，默认当前时间
+ * @returns TOP 操作系统数据列表
+ */
+  async getTopOs(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-oses?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || []) as TopPageItem[];
+  }
+
+
+  /**
+   * 获取 TOP 浏览器数据
    * @param endTime 结束时间，默认当前时间
-   * @returns 指标数据
+   * @returns TOP 浏览器数据列表
    */
-  async getMetrics(dateRange: DateRange): Promise<Metrics> {
-    const res = await fetch(`${this.baseUrl}/metrics?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
-    return (res?.data || new Metrics()) as Metrics;
+  async getTopBrowsers(dateRange: DateRange): Promise<TopPageItem[]> {
+    const res = await fetch(`${this.baseUrl}/top-browsers?start_time=${dateRange.startTime}&end_time=${dateRange.endTime}`).then(r => r.json());
+    return (res?.data || []) as TopPageItem[];
   }
 }
 

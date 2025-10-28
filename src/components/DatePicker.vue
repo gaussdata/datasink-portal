@@ -12,17 +12,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { createDateOptions, DateOption, DEFAULT_DATE_RANGE } from '@/models';
+import { createDateOptions, DEFAULT_DATE_RANGE, IDateOption } from '@/models';
 import { ref } from 'vue';
 const datePickerList = createDateOptions();
 const currentDateTag = ref(DEFAULT_DATE_RANGE);
 const emit = defineEmits(['change']);
-const onClick = (item: DateOption) => {
+const onClick = (item: IDateOption) => {
   if (item.value === currentDateTag.value) {
     return;
   }
   currentDateTag.value = item.value;
-  emit('change', item.getDateRange());
+  emit('change', item.getDateVo());
 };
 </script>
 <style lang="scss" scoped>

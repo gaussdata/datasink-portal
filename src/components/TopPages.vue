@@ -4,9 +4,12 @@
     <ul class="page-list">
       <li v-for="item in data" :key="item.url" class="page-list-item">
         <div class="text">
-          <a class="url" :href="item.url" target="__blank">
+          <!-- 我们不希望需要分析的目标网站引用本站的来源，造成数据失真 -->
+          <a class="url" v-if="type === 'url'" :href="item.url" target="_blank" rel="noopener noreferrer">
             {{ urlPath(item.url) }}
           </a>
+          <span v-else-if="type === 'referrer'">{{ urlOrigin(item.url) }}</span>
+          <span v-else>{{ item.label }}</span>
           <span class="count">{{ item.pv }}</span>
         </div>
         <div class="bar">
@@ -22,7 +25,7 @@
 
 <script setup lang="ts">
 import { analysisService, type TopPageItem } from '@/api/services/analysis.ts';
-import { DateRange } from '@/models';
+import { DateVo } from '@/models';
 import { computed, onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -32,8 +35,8 @@ const props = defineProps({
   type: {
     default: 'url', // url referrer
   },
-  dateRange: {
-    default: () => new DateRange(),
+  dateVo: {
+    default: () => new DateVo(),
   },
 });
 
@@ -44,9 +47,13 @@ const getTopPages = async () => {
   loading.value = true;
   try {
     if (props.type === 'url') {
-      data.value = await analysisService.getTopPages(props.dateRange);
-    } else {
-      data.value = await analysisService.getTopReferers(props.dateRange);
+      data.value = await analysisService.getTopPages(props.dateVo.range);
+    } else if (props.type === 'referrer') {
+      data.value = await analysisService.getTopReferers(props.dateVo.range);
+    } else if (props.type === 'os') {
+      data.value = await analysisService.getTopOs(props.dateVo.range);
+    } else if (props.type === 'browser') {
+      data.value = await analysisService.getTopBrowsers(props.dateVo.range);
     }
 
   } finally {
@@ -57,7 +64,7 @@ const getTopPages = async () => {
 const total = computed(() => data.value.reduce((a, b) => a + (b.pv || 0), 0));
 
 watch(
-  () => props.dateRange,
+  () => props.dateVo,
   () => {
     getTopPages();
   },
@@ -73,9 +80,21 @@ function barWidth(item: TopPageItem) {
 }
 
 function urlPath(url: string) {
-  const [path, _hash] = url.split('#');
-  const [pathname, _query] = path.split('?');
-  return pathname || '/';
+  try {
+    const urlObj = new URL(url);
+    return urlObj.pathname || '/';
+  } catch (error) {
+    return url;
+  }
+}
+
+function urlOrigin(url: string) {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.origin;
+  } catch (error) {
+    return url;
+  }
 }
 </script>
 
@@ -100,10 +119,12 @@ function urlPath(url: string) {
   align-items: center;
   height: 32px;
   .text {
+    width: calc(100% - 100px);
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
     padding: 0 8px;
   }
   .url {

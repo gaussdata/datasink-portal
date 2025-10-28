@@ -11,14 +11,14 @@
 </template>
 <script lang="ts" setup>
 import { analysisService } from '@/api/services/analysis';
-import { createMetricsList, DateRange, Metrics } from '@/models';
+import { createMetricsList, DateVo, Metrics } from '@/models';
 import { computed, onMounted, ref, watch } from 'vue';
 const props = defineProps({
   title: {
     default: '访问量统计',
   },
-  dateRange: {
-    default: () => new DateRange(),
+  dateVo: {
+    default: () => new DateVo(),
   },
 });
 
@@ -30,14 +30,14 @@ const metricsList = computed(() => createMetricsList(metrics.value));
 const getMetrics = async () => {
   loading.value = true;
   try {
-    metrics.value = await analysisService.getMetrics(props.dateRange);
+    metrics.value = await analysisService.getMetrics(props.dateVo.range);
   } finally {
     loading.value = false;
   }
 };
 
 watch(
-  () => props.dateRange,
+  () => props.dateVo,
   () => {
     getMetrics();
   },
@@ -61,7 +61,7 @@ onMounted(async () => {
 }
 
 .metric-item {
-  width: 150px;
+  width: 100px;
 }
 .metric-label {
   font-size: 14px;

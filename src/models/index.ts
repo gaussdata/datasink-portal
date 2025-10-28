@@ -1,6 +1,17 @@
 import { formatInt, formatPercentage, millisecondToSecond } from '@/utils';
 import dayjs from 'dayjs';
 
+export enum DateLevel {
+  HOUR = 'hour',
+  DAY = 'day',
+  MONTH = 'month',
+}
+
+export interface ChartPoint {
+  label: string;
+  value: number;
+}
+
 export enum MetricType {
   PAGEVIEWS = 'pageviews',
   VISITORS = 'visitors',
@@ -49,54 +60,70 @@ export class DateRange {
   endTime: number = dayjs().endOf('hour').valueOf();
 }
 
-export interface DateOption {
+export interface IDateOption {
   label: string;
   value: string;
-  getDateRange: () => DateRange;
+  getDateVo: () => DateVo;
 }
 
-export const createDateOptions = (): DateOption[] => {
+export class DateVo {
+  level: DateLevel = DateLevel.HOUR;
+  range: DateRange = new DateRange();
+}
+
+export const createDateOptions = (): IDateOption[] => {
   return [
     {
       label: '24 小时',
-      value: '24h',
-      getDateRange() {
+      value: '24h', 
+      getDateVo() {
         return {
-          startTime: dayjs().subtract(24, 'hour').startOf('hour').valueOf(),
-          endTime: dayjs().endOf('hour').valueOf(),
+          level: DateLevel.HOUR,
+          range: {
+            startTime: dayjs().subtract(24, 'hour').startOf('hour').valueOf(),
+            endTime: dayjs().endOf('hour').valueOf(),
+          }
         }
       }
     },
     {
       label: '7 天',
-      value: '7d',
-      getDateRange() {  
+      value: '7d', 
+      getDateVo() {
         return {
-          startTime: dayjs().subtract(7, 'day').startOf('day').valueOf(),
-          endTime: dayjs().endOf('day').valueOf(),
+          level: DateLevel.DAY,
+          range: {  
+            startTime: dayjs().subtract(7, 'day').startOf('day').valueOf(),
+            endTime: dayjs().endOf('day').valueOf(),
+          }
         }
       }
     },
     {
       label: '30 天',
-      value: '30d',
-      getDateRange() {  
+      value: '30d', 
+      getDateVo() {
         return {
-          startTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
-          endTime: dayjs().endOf('day').valueOf(),
+          level: DateLevel.DAY,
+          range: {  
+            startTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+            endTime: dayjs().endOf('day').valueOf(),
+          }
         }
       }
     },
     {
-      label: '365 天',
-      value: '365d',
-      getDateRange() {  
+      label: '12 月',
+      value: '12m', 
+      getDateVo() {
         return {
-          startTime: dayjs().subtract(365, 'day').startOf('day').valueOf(),
-          endTime: dayjs().endOf('day').valueOf(),
+          level: DateLevel.MONTH, 
+          range: {  
+            startTime: dayjs().subtract(12, 'month').startOf('month').valueOf(),
+            endTime: dayjs().endOf('month').valueOf(),
+          }
         }
       }
-    }
-
+    },
   ];
 }
