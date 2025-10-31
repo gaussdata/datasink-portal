@@ -58,14 +58,16 @@ onMounted(async () => {
   display: flex;
   flex-wrap: wrap;
   padding: 0 12px;
+  gap: 24px;
 }
 
 .metric-item {
-  width: 100px;
+  width: 150px;
 }
 .metric-label {
   font-size: 14px;
   color: #4b4b4b;
+  font-weight: bold;
 }
 .metric-value {
   font-weight: bold;

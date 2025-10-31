@@ -1,4 +1,4 @@
-import { formatInt, formatPercentage, millisecondToSecond } from '@/utils';
+import { formatDuration, formatInt, formatPercentage, millisecondToSecond } from '@/utils';
 import dayjs from 'dayjs';
 
 export enum DateLevel {
@@ -48,7 +48,7 @@ export const createMetricsList = (metrics: Metrics) => {
     },
     {
       label: '平均会话时长',
-      value: millisecondToSecond(metrics[MetricType.TOTAL_TIME]),
+      value: formatDuration(metrics[MetricType.TOTAL_TIME]),
     },
   ];
 };
@@ -75,7 +75,7 @@ export const createDateOptions = (): IDateOption[] => {
   return [
     {
       label: '24 小时',
-      value: '24h', 
+      value: '24h',
       getDateVo() {
         return {
           level: DateLevel.HOUR,
@@ -88,11 +88,11 @@ export const createDateOptions = (): IDateOption[] => {
     },
     {
       label: '7 天',
-      value: '7d', 
+      value: '7d',
       getDateVo() {
         return {
           level: DateLevel.DAY,
-          range: {  
+          range: {
             startTime: dayjs().subtract(7, 'day').startOf('day').valueOf(),
             endTime: dayjs().endOf('day').valueOf(),
           }
@@ -101,11 +101,11 @@ export const createDateOptions = (): IDateOption[] => {
     },
     {
       label: '30 天',
-      value: '30d', 
+      value: '30d',
       getDateVo() {
         return {
           level: DateLevel.DAY,
-          range: {  
+          range: {
             startTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
             endTime: dayjs().endOf('day').valueOf(),
           }
@@ -114,11 +114,11 @@ export const createDateOptions = (): IDateOption[] => {
     },
     {
       label: '12 月',
-      value: '12m', 
+      value: '12m',
       getDateVo() {
         return {
-          level: DateLevel.MONTH, 
-          range: {  
+          level: DateLevel.MONTH,
+          range: {
             startTime: dayjs().subtract(12, 'month').startOf('month').valueOf(),
             endTime: dayjs().endOf('month').valueOf(),
           }

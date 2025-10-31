@@ -4,7 +4,7 @@
     <div class="trend-content" @mouseout="handleMouseOut">
       <div class="trend-row">
         <div class="trend-total">
-          <div>浏览量</div>
+          <div class="trend-total-label">浏览量</div>
           <div class="trend-total-value">{{ totalPageView }}</div>
         </div>
         <div class="trend-chart">
@@ -13,7 +13,7 @@
       </div>
       <div class="trend-row">
         <div class="trend-total">
-          <div>访客</div>
+          <div class="trend-total-label">访客</div>
           <div class="trend-total-value">{{ totalVisitor }}</div>
         </div>
         <div class="trend-chart">
@@ -79,6 +79,10 @@ onMounted(() => {
   gap: 16px;
   .trend-total {
     width: 50px;
+  }
+  .trend-total-label {
+    color: #4b4b4b;
+    font-weight: bold;
     font-size: 14px;
   }
   .trend-total-value {
